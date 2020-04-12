@@ -1,0 +1,12 @@
+//////////////////////////////////// Dependencies ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+"use strict";
+
+const express = require('express');
+
+// Setup DB connection
+var mysql = require('mysql');
+var con = require('./connect');
+var cred = require('./credentials');
+const app = express();
+const port = 4020;
