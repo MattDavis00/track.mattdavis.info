@@ -1,4 +1,7 @@
 import React from 'react';
+
+import './App.css';
+
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 
 const mapStyle = [
@@ -188,6 +191,8 @@ const mapStyle = [
     }
 ];
 
+const containerStyle = {position: 'relative'};
+
 class MapContainer extends React.Component {
 
     constructor(props) {
@@ -221,14 +226,17 @@ class MapContainer extends React.Component {
 
     render() {
         return (
-            <Map
+            <div className="map-container">
+                <Map
                 google={this.props.google}
-                zoom={8}
-                initialCenter={{ lat: 47.444, lng: -122.176}}
+                zoom={8} initialCenter={{ lat: 47.444, lng: -122.176}}
                 onReady={(mapProps, map) => this._mapLoaded(mapProps, map)}
-            >
-                {this.displayMarkers()}
-            </Map>
+                containerStyle = {containerStyle}
+                disableDefaultUI = {true}
+                >
+                    {this.displayMarkers()}
+                </Map>
+            </div>
         );
 
     }
