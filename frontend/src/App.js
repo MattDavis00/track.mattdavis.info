@@ -6,7 +6,7 @@ import NavBar from './NavBar';
 
 function App() {
     return (
-        <div class="app">
+        <div className="app">
             <NavBar></NavBar>
             <MapContainer></MapContainer>
         </div>
