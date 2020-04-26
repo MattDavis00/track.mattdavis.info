@@ -199,12 +199,10 @@ class MapContainer extends React.Component {
         super(props);
     
         this.state = {
-          stores: [{latitude: 47.49855629475769, longitude: -122.14184416996333},
-                  {latitude: 47.359423, longitude: -122.021071},
-                  {latitude: 47.2052192687988, longitude: -121.988426208496},
-                  {latitude: 47.6307081, longitude: -122.1434325},
-                  {latitude: 47.3084488, longitude: -122.2140121},
-                  {latitude: 47.5524695, longitude: -122.0425407}]
+          stores: [{latitude: 54.046758, longitude: -2.799259},
+                  {latitude: 53.480168, longitude: -2.242747},
+                  {latitude: 52.478570, longitude: -1.893456},
+                  {latitude: 51.500959, longitude: -0.124628}]
         }
     }
 
@@ -229,7 +227,7 @@ class MapContainer extends React.Component {
             <div className="map-container">
                 <Map
                 google={this.props.google}
-                zoom={8} initialCenter={{ lat: 47.444, lng: -122.176}}
+                zoom={6} initialCenter={{ lat: 54.541, lng: -4.083}}
                 onReady={(mapProps, map) => this._mapLoaded(mapProps, map)}
                 containerStyle = {containerStyle}
                 disableDefaultUI = {true}
