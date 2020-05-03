@@ -91,6 +91,14 @@ try {
     });
 
     //////////////////////// Submit Node ////////////////////////
+    /**
+     * JSON Request Example:
+     * {
+     *      "deviceID": "abcde",
+     *      "longitude": 5.4965325,
+     *      "latitude": 3.1655425
+     * }
+     */
     app.post('/submit-node', function(req, res) {
         const data = req.body;
 
