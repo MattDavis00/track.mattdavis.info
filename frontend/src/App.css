@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500&display=swap');
 
 :root {
-    --navbar-height: 62px;
+    --navbar-height: 60px;
     --primary-background: #222222;
-    --primary-foreground: #eeeeee
+    --secondary-background: #111111;
+    --primary-foreground: #eeeeee;
+    --secondary-foreground: #cccccc;
 }
 
 .app {
@@ -26,4 +28,30 @@ h1, h2, h3, h4, h5, h6 {
 
 .map-container {
     height: calc(100vh - var(--navbar-height));
+}
+
+.white-button {
+    cursor: pointer;
+    color: var(--secondary-foreground);
+}
+
+.white-button:hover {
+    color: var(--primary-foreground);
+}
+
+.sideMenu {
+    position: absolute;
+    color: var(--primary-foreground);
+    background-color: var(--secondary-background);
+    right: 0;
+    bottom: 0;
+    height: calc(100vh - var(--navbar-height));
+    width: 500px;
+    z-index: 10;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
