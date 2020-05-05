@@ -6,8 +6,13 @@ class SideMenu extends React.Component
         return (
             <div className="sideMenu">
                 <div className="flex-column">
-                    <div>The Side Menu</div>
-                    <h3>The Side Menu</h3>
+                    <h3>Devices</h3>
+                    <div className="devices">
+                        <div className="flex-row new-device">
+                            <input placeholder="Friendly Name"></input>
+                            <div className="button">Add</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
