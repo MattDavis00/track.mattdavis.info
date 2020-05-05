@@ -7,6 +7,7 @@
     --primary-foreground: #eeeeee;
     --secondary-foreground: #cccccc;
     --green-accent: rgba(76,175,80,0.9);
+    --green-accent-secondary: rgba(76,175,80,0.8);
 }
 
 .app {
@@ -84,6 +85,10 @@ h1, h2, h3, h4, h5, h6 {
     background-color: var(--green-accent);
     text-align: center;
     cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--green-accent-secondary);
 }
 
 @media (max-width: 991.98px) {
