@@ -28,7 +28,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .map-container {
-    height: calc(100vh - var(--navbar-height));
+    position: fixed;
+    top: var(--navbar-height);
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
 .white-button {
@@ -41,12 +45,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .sideMenu {
-    position: absolute;
+    position: fixed;
     color: var(--primary-foreground);
     background-color: var(--secondary-background);
+    top: var(--navbar-height);
     right: 0;
     bottom: 0;
-    height: calc(100vh - var(--navbar-height));
     width: 500px;
     z-index: 10;
 }
@@ -80,4 +84,13 @@ h1, h2, h3, h4, h5, h6 {
     background-color: var(--green-accent);
     text-align: center;
     cursor: pointer;
+}
+
+@media (max-width: 991.98px) {
+
+    .sideMenu {
+        width: unset;
+        left: 0;
+    }
+
 }
