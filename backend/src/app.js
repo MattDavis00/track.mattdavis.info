@@ -15,7 +15,7 @@ var cred = require('./credentials');
 const https = require('https');
 
 // Client Session
-var session = require('express-session')
+var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
 var sessionStore = new MySQLStore({}, con);
 // Set Session Parameters
@@ -72,9 +72,9 @@ try {
                 const data = JSON.parse(jsonData);
                 console.log("LoggedIn: " + data.loggedIn);
                 if(data.loggedIn === true) {
-                    res.send("User was authenticated with this token!: " + jsonData);
                     req.session.loggedIn = true;
                     req.session.userID = data.userID;
+                    res.redirect(data.redirectURL);
                 } else {
                     res.send("User could not be authenticated using SSO.");
                 }
@@ -134,6 +134,88 @@ try {
                 res.send("Node could not be inserted.");
             }
         });
+    }
+
+    //////////////////////// Add New Device ////////////////////////
+    /**
+     * JSON Request Example:
+     * {
+     *      "deviceName": "A Friendly Name"
+     * }
+     */
+    app.post('/add-device', function(req, res) {
+        const data = req.body;
+
+        if ( data.deviceName.length > 0 && data.deviceName.length <= 20 && req.session.loggedIn === true ) {
+            addDevice(data, req, res);
+        } else if (req.session.loggedIn !== true) {
+            res.send(JSON.stringify({
+                "success": false,
+                "errors": [
+                    {
+                        "errorMessage": "You are not logged in!",
+                        "field": null
+                    }
+                ]
+            }));
+        } else if (data.deviceName.length > 20) {
+            res.send(JSON.stringify({
+                "success": false,
+                "errors": [
+                    {
+                        "errorMessage": "Device name must be less than 20 characters.",
+                        "field": "name"
+                    }
+                ]
+            }));
+        } else {
+            res.send(JSON.stringify({
+                "success": false,
+                "errors": [
+                    {
+                        "errorMessage": "Device must be given a name.",
+                        "field": "name"
+                    }
+                ]
+            }));
+        }
+    });
+
+    function addDevice(data, req, res) {
+        const randomID = generateRandomID(64);
+
+        let sql = "INSERT INTO device (device_id, user_id, device_name) VALUES (?,?,?)";
+        con.query(sql, [randomID, req.session.userID, data.deviceName], function (err, result) {
+            if (!err)
+            {
+                console.log("Number of devices inserted: " + result.affectedRows);
+                if (result.affectedRows === 1) {
+                    res.send(JSON.stringify({"success": true, "deviceID": randomID, "errors": []}));
+                } else {
+                    res.send("Device could not be created.");
+                }
+            } else {
+                console.log(err);
+                res.send("Device could not be created.");
+            }
+        });
+    }
+
+    /**
+     * Given a number will generate a random string containing characters:
+     * "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+     * For example, generateRandomID(4) may return "gY4T".
+     * 62^length unique combinations.
+     * @param {*} length How long the random ID should be
+     */
+    function generateRandomID(length) {
+        let id = "";
+        let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for(let i = 0; i < length; i++) {
+            let randomNumber = Math.floor(Math.random() * characters.length); //Get a random index
+            id += characters.charAt(randomNumber);
+        }
+        return id;
     }
 
 } catch(err) {
