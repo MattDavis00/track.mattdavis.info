@@ -6,6 +6,7 @@
     --secondary-background: #111111;
     --primary-foreground: #eeeeee;
     --secondary-foreground: #cccccc;
+    --tertiary-foreground: rgba(255,255,255, 0.5);
     --green-accent: rgba(76,175,80,0.9);
     --green-accent-secondary: rgba(76,175,80,0.8);
 }
@@ -39,6 +40,7 @@ h1, h2, h3, h4, h5, h6 {
 .white-button {
     cursor: pointer;
     color: var(--secondary-foreground);
+    user-select: none;
 }
 
 .white-button:hover {
@@ -54,6 +56,7 @@ h1, h2, h3, h4, h5, h6 {
     bottom: 0;
     width: 500px;
     z-index: 10;
+    padding: 20px;
 }
 
 .flex-column {
@@ -65,7 +68,17 @@ h1, h2, h3, h4, h5, h6 {
 .flex-row {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
+
+.flex-column > * {
+    margin: 5px 0 5px 0;
+}
+
+.flex-row > * {
+    margin: 0 5px 0 5px;
+}
+
 
 .new-device > input {
     background-color: var(--primary-background);
@@ -89,6 +102,38 @@ h1, h2, h3, h4, h5, h6 {
 
 .button:hover {
     background-color: var(--green-accent-secondary);
+}
+
+.horizontal-divider {
+    width: 80%;
+    border-bottom: 1px solid var(--tertiary-foreground);
+}
+
+.devices > * {
+    margin: 5px 0 5px 0;
+}
+
+.id-box {
+    background-color: var(--primary-background);
+    padding: 5px 10px 5px 10px;
+    color: var(--tertiary-foreground);
+    word-break: break-all;
+    width: 350px;
+    text-align: center;
+}
+
+.id-box.small-text {
+    font-size: 0.5rem;
+    padding: 10px 8px 10px 8px;
+}
+
+.no-break {
+    word-break: keep-all;
+    white-space: nowrap;
+}
+
+.text-center {
+    text-align: center;
 }
 
 @media (max-width: 991.98px) {

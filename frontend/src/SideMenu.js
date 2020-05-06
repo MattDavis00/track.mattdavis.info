@@ -1,4 +1,6 @@
 import React from 'react';
+import DeviceList from './DeviceList';
+import Utility from './Utility';
 
 class SideMenu extends React.Component
 {
@@ -7,25 +9,51 @@ class SideMenu extends React.Component
         super(props);
 
         this.state = {
-            newDeviceName: ""
-        }
+            newDeviceName: "",
+            devices: [
+                {
+                    id: "m7iU5udHvFiDvkWj7sno7yZxCZhGFQeJRpjfWtpVUAbm7dwoy8ugmOePqLiZ2Knh",
+                    name: "A Cool Device"
+                },
+                {
+                    id: "aaiU5udHvFiDvkWj7sno7yZxCZhGFQeJRpjfWtpVUAbm7dwoy8ugmOePqLiZ2Kaa",
+                    name: "Another Device"
+                }
+            ],
+            loggedIn: false
+        };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.addDevice = this.addDevice.bind(this);
     }
 
     render() {
-        return (
-            <div className="sideMenu">
-                <div className="flex-column">
-                    <h3>Devices</h3>
-                    <div className="devices">
-                        <div className="flex-row new-device">
-                            <input name="newDeviceName" value={this.state.newDeviceName} onChange={this.handleInputChange} placeholder="Friendly Name"></input>
-                            <div onClick={this.addDevice} className="button">Add</div>
-                        </div>
-                    </div>
+
+        let sideMenuContents;
+
+        if(this.state.loggedIn === true) {
+            sideMenuContents =
+            <div className="devices flex-column">
+                <h3>Devices</h3>
+                <div className="horizontal-divider"></div>
+                <DeviceList devices={this.state.devices} />
+                <div className="horizontal-divider"></div>
+                <div className="flex-row new-device">
+                    <input name="newDeviceName" value={this.state.newDeviceName} onChange={this.handleInputChange} placeholder="Friendly Name"></input>
+                    <div onClick={this.addDevice} className="button">Add</div>
                 </div>
+            </div>;
+        } else {
+            sideMenuContents =
+            <div className="flex-column text-center">
+                <h4>You are not logged in. To use the dashboard please log in through the Single Sign-On service.</h4>
+                <div className="button" onClick={Utility.ssoRedirect}>Login</div>
+            </div>
+        }
+
+        return (
+            <div className="sideMenu flex-column">
+                {sideMenuContents}
             </div>
         );
     }
