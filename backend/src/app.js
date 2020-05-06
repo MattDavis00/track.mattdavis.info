@@ -218,8 +218,6 @@ try {
      * }
      */
     app.post('/get-user-meta', function(req, res) {
-        req.session.loggedIn = true;
-        req.session.userID = 1;
 
         if (req.session.loggedIn === true) {
             let callback = devices => {
