@@ -201,6 +201,67 @@ try {
         });
     }
 
+    //////////////////////// Get User Meta ////////////////////////
+    /**
+     * JSON Response Example:
+     * {
+     *      "loggedIn": true,
+     *      "userID": 1,
+     *      "devices": [
+     *          {
+     *              "device_id": "m7iU5udHvFiDvkWj7sno7yZxCZhGFQeJRpjfWtpVUAbm7dwoy8ugmOePqLiZ2Knh",
+     *              "user_id": 1,
+     *              "device_name": "A New Device",
+     *              "timestamp": "2020-05-05T20:01:26.000Z"
+     *          }
+     *      ]
+     * }
+     */
+    app.post('/get-user-meta', function(req, res) {
+        req.session.loggedIn = true;
+        req.session.userID = 1;
+
+        if (req.session.loggedIn === true) {
+            let callback = devices => {
+                res.send(JSON.stringify({
+                    "loggedIn": req.session.loggedIn,
+                    "userID": req.session.userID,
+                    "devices": devices
+                }));
+            }
+
+            getDevices(req.session.userID, callback);
+        } else {
+            res.send(JSON.stringify({
+                "loggedIn": false
+            }));
+        }
+
+    });
+
+    /**
+     * Gets the devices for a specified user
+     * @param {number} userID The user ID
+     * @param {function} callback The function to callback with the array of devices
+     */
+    function getDevices(userID, callback) {
+        let sql = "SELECT * FROM device WHERE user_id = ?";
+        con.query(sql, [userID], function (err, result) {
+            if (!err)
+            {
+                console.log("Number of devices returned: " + result.length);
+                console.log(result);
+                if (result.length > 0) {
+                    callback(result);
+                } else {
+                    callback([]);
+                }
+            } else {
+                callback([]);
+            }
+        });
+    }
+
     /**
      * Given a number will generate a random string containing characters:
      * "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
