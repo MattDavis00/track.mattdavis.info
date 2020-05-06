@@ -6,15 +6,11 @@ class DeviceList extends React.Component
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            devices: props.devices
-        };
     }
 
     render() {
 
-        const listItems = this.state.devices.map((device) =>
+        const listItems = this.props.appState.devices.map((device) =>
             <Device device={device} />
         );
 

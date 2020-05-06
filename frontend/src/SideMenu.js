@@ -9,18 +9,7 @@ class SideMenu extends React.Component
         super(props);
 
         this.state = {
-            newDeviceName: "",
-            devices: [
-                {
-                    id: "m7iU5udHvFiDvkWj7sno7yZxCZhGFQeJRpjfWtpVUAbm7dwoy8ugmOePqLiZ2Knh",
-                    name: "A Cool Device"
-                },
-                {
-                    id: "aaiU5udHvFiDvkWj7sno7yZxCZhGFQeJRpjfWtpVUAbm7dwoy8ugmOePqLiZ2Kaa",
-                    name: "Another Device"
-                }
-            ],
-            loggedIn: false
+            newDeviceName: ""
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -31,12 +20,12 @@ class SideMenu extends React.Component
 
         let sideMenuContents;
 
-        if(this.state.loggedIn === true) {
+        if(this.props.appState.loggedIn === true) {
             sideMenuContents =
             <div className="devices flex-column">
                 <h3>Devices</h3>
                 <div className="horizontal-divider"></div>
-                <DeviceList devices={this.state.devices} />
+                <DeviceList appState={this.props.appState} />
                 <div className="horizontal-divider"></div>
                 <div className="flex-row new-device">
                     <input name="newDeviceName" value={this.state.newDeviceName} onChange={this.handleInputChange} placeholder="Friendly Name"></input>
@@ -89,13 +78,16 @@ class SideMenu extends React.Component
             redirect: 'follow',
             referrerPolicy: 'no-referrer',
             body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+            Utility.getUserMeta((meta) => {
+                this.props.appState.setState(meta);
+            });
+
+            this.setState({newDeviceName: ""});
+            //TODO: Check response for validation errors
         });
-
-        console.log(jsonResponse);
-
-        const res = JSON.parse(jsonResponse);
-
-        console.log(res);
 
     }
 }

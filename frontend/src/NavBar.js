@@ -2,17 +2,25 @@ import React from 'react';
 import SideMenu from './SideMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretSquareRight, faCaretSquareLeft } from '@fortawesome/free-solid-svg-icons'
+import Utility from './Utility';
 
 class NavBar extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            menuVisible: false
+        };
+
         this.toggleMenu = this.toggleMenu.bind(this);
-        this.state = {menuVisible: false};
     }
 
     toggleMenu() {
         this.setState({menuVisible: !this.state.menuVisible});
+        Utility.getUserMeta((meta) => {
+            this.props.appState.setState(meta);
+        });
     }
 
     render() {
@@ -22,7 +30,7 @@ class NavBar extends React.Component {
 
         if (this.state.menuVisible) {
             menuIcon = <FontAwesomeIcon onClick={this.toggleMenu} icon={faCaretSquareRight} />;
-            menu = <SideMenu />;
+            menu = <SideMenu appState={this.props.appState} />;
         } else {
             menuIcon = <FontAwesomeIcon onClick={this.toggleMenu} icon={faCaretSquareLeft} />;
             menu = null;
