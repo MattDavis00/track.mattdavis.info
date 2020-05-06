@@ -14,6 +14,11 @@ var cred = require('./credentials');
 
 const https = require('https');
 
+// Do not cache any API requests
+// Client must check again each time to ensure consistency.
+const nocache = require('nocache');
+app.use(nocache());
+
 // Client Session
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
