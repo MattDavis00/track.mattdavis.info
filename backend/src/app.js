@@ -273,11 +273,7 @@ try {
 
         if (req.session.loggedIn === true) {
             let callback = nodes => {
-                res.send(JSON.stringify({
-                    "loggedIn": req.session.loggedIn,
-                    "userID": req.session.userID,
-                    "nodes": nodes
-                }));
+                res.send(JSON.stringify(nodes));
             }
 
             getNodes(req.session.userID, callback);
