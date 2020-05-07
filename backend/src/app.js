@@ -265,6 +265,57 @@ try {
         });
     }
 
+    //////////////////////// Get Device Nodes ////////////////////////
+    /**
+     * 
+     */
+    app.post('/get-device-nodes', function(req, res) {
+
+        if (req.session.loggedIn === true) {
+            let callback = nodes => {
+                res.send(JSON.stringify({
+                    "loggedIn": req.session.loggedIn,
+                    "userID": req.session.userID,
+                    "nodes": nodes
+                }));
+            }
+
+            getNodes(req.session.userID, callback);
+        } else {
+            res.send(JSON.stringify({
+                "loggedIn": false
+            }));
+        }
+
+    });
+
+    /**
+     * Gets the nodes for a specified user
+     * @param {number} userID The user ID
+     * @param {function} callback The function to callback with the array of nodes
+     */
+    function getNodes(userID, callback) {
+        let sql = `
+        SELECT node.node_id, node.device_id, node.longitude, node.latitude, node.timestamp
+        FROM device, node 
+        WHERE device.user_id = ? AND device.device_id = node.device_id
+        `;
+        con.query(sql, [userID], function (err, result) {
+            if (!err)
+            {
+                console.log("Number of nodes returned: " + result.length);
+                console.log(result);
+                if (result.length > 0) {
+                    callback(result);
+                } else {
+                    callback([]);
+                }
+            } else {
+                callback([]);
+            }
+        });
+    }
+
     /**
      * Given a number will generate a random string containing characters:
      * "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
