@@ -4,6 +4,8 @@ import './App.css';
 import MapContainer from './MapContainer';
 import NavBar from './NavBar';
 
+import Utility from './Utility';
+
 class App extends React.Component {
 
     constructor(props) {
@@ -15,6 +17,7 @@ class App extends React.Component {
             loggedIn: false,
             userID: null,
             devices: [],
+            nodes: [],
             setState: this.setAppState
         };
     }
@@ -26,6 +29,15 @@ class App extends React.Component {
                 <MapContainer appState={this.state}></MapContainer>
             </div>
         );
+    }
+
+    componentDidMount() {
+        Utility.getUserMeta((meta) => { // Update loggedIn values
+            this.setState(meta);
+            Utility.getJSONData('/api/get-device-nodes', data => {
+                this.setState({nodes: data});
+            });
+        });
     }
 
     setAppState(props) {

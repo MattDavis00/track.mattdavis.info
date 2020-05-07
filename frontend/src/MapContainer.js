@@ -197,20 +197,14 @@ class MapContainer extends React.Component {
 
     constructor(props) {
         super(props);
-    
-        this.state = {
-          stores: [{latitude: 54.046758, longitude: -2.799259},
-                  {latitude: 53.480168, longitude: -2.242747},
-                  {latitude: 52.478570, longitude: -1.893456},
-                  {latitude: 51.500959, longitude: -0.124628}]
-        }
     }
 
     displayMarkers = () => {
-        return this.state.stores.map((store, index) => {
+      console.log(this.props.appState);
+        return this.props.appState.nodes.map((node, index) => {
           return <Marker key={index} id={index} position={{
-           lat: store.latitude,
-           lng: store.longitude
+           lat: node.latitude,
+           lng: node.longitude
          }}
          onClick={() => console.log("You clicked me!")} />
         })
