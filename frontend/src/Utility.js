@@ -17,6 +17,20 @@ class Utility
         .then(res => res.json())
         .then(data => callback(data));
     }
+
+    static getJSONData(path, callback) {
+        fetch( path ,{
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {'Content-Type': 'application/json'},
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer'
+        })
+        .then(res => res.json())
+        .then(data => callback(data));
+    }
 }
 
 export default Utility;
