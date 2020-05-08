@@ -2,7 +2,10 @@ import React from 'react';
 
 import './App.css';
 
-import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import { Map, GoogleApiWrapper, Marker, Icon } from 'google-maps-react';
+
+import mapMarker from './redCircle.png';
+import currentMapMarker from './greenCircle.png';
 
 const mapStyle = [
     {
@@ -202,11 +205,16 @@ class MapContainer extends React.Component {
     displayMarkers = () => {
       console.log(this.props.appState);
         return this.props.appState.nodes.map((node, index) => {
-          return <Marker key={index} id={index} position={{
-           lat: node.latitude,
-           lng: node.longitude
-         }}
-         onClick={() => console.log("You clicked me!")} />
+          return <Marker
+            key={index}
+            id={index}
+            position={{lat: node.latitude, lng: node.longitude}}
+            icon={{
+              url: (index === this.props.appState.nodes.length - 1 ? currentMapMarker : mapMarker),
+              anchor: new window.google.maps.Point(8, 8),
+              scaledSize: new window.google.maps.Size(16, 16)
+            }}
+            onClick={() => console.log("You clicked me!")} />
         })
     }
 
