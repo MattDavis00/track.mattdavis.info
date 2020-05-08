@@ -278,9 +278,7 @@ try {
 
             getNodes(req.session.userID, callback);
         } else {
-            res.send(JSON.stringify({
-                "loggedIn": false
-            }));
+            res.send(JSON.stringify([]));
         }
 
     });
