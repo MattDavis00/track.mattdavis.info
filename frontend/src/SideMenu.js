@@ -69,7 +69,7 @@ class SideMenu extends React.Component
             deviceName: this.state.newDeviceName
         };
 
-        const jsonResponse = fetch("/api/add-device",{
+        fetch("/api/add-device",{
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',

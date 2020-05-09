@@ -4,10 +4,6 @@ import Device from './Device';
 class DeviceList extends React.Component
 {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
 
         const listItems = this.props.appState.devices.map((device) =>

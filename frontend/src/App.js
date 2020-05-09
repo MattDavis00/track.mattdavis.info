@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './App.css';
-import MapContainer from './MapContainer';
+import GoogleMap from './GoogleMap';
 import NavBar from './NavBar';
 
 import Utility from './Utility';
@@ -26,7 +26,7 @@ class App extends React.Component {
         return (
             <div className="app">
                 <NavBar appState={this.state}></NavBar>
-                <MapContainer appState={this.state}></MapContainer>
+                <GoogleMap appState={this.state}></GoogleMap>
             </div>
         );
     }

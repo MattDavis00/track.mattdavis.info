@@ -1,12 +1,3 @@
-import React from 'react';
-
-import './App.css';
-
-import { Map, GoogleApiWrapper, Marker, Icon } from 'google-maps-react';
-
-import mapMarker from './redCircle.png';
-import currentMapMarker from './greenCircle.png';
-
 const mapStyle = [
     {
       "elementType": "geometry",
@@ -194,55 +185,4 @@ const mapStyle = [
     }
 ];
 
-const containerStyle = {position: 'relative'};
-
-class MapContainer extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    displayMarkers = () => {
-      console.log(this.props.appState);
-        return this.props.appState.nodes.map((node, index) => {
-          return <Marker
-            key={index}
-            id={index}
-            position={{lat: node.latitude, lng: node.longitude}}
-            icon={{
-              url: (index === this.props.appState.nodes.length - 1 ? currentMapMarker : mapMarker),
-              anchor: new window.google.maps.Point(8, 8),
-              scaledSize: new window.google.maps.Size(16, 16)
-            }}
-            onClick={() => console.log("You clicked me!")} />
-        })
-    }
-
-    _mapLoaded(mapProps, map) {
-        map.setOptions({
-           styles: mapStyle
-        })
-    }
-
-    render() {
-        return (
-            <div className="map-container">
-                <Map
-                google={this.props.google}
-                zoom={6} initialCenter={{ lat: 54.541, lng: -4.083}}
-                onReady={(mapProps, map) => this._mapLoaded(mapProps, map)}
-                containerStyle = {containerStyle}
-                disableDefaultUI = {true}
-                >
-                    {this.displayMarkers()}
-                </Map>
-            </div>
-        );
-
-    }
-
-}
-
-export default GoogleApiWrapper({
-  apiKey: 'AIzaSyBK0SNa9cPIfx600KxgNviICCCBGDdHW10'
-})(MapContainer);
+export default mapStyle;
