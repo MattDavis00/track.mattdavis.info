@@ -293,6 +293,7 @@ try {
         SELECT node.node_id, node.device_id, node.longitude, node.latitude, node.timestamp
         FROM device, node 
         WHERE device.user_id = ? AND device.device_id = node.device_id
+        ORDER BY node.node_id ASC
         `;
         con.query(sql, [userID], function (err, result) {
             if (!err)
