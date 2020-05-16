@@ -1,5 +1,6 @@
 #include <TinyGPS++.h>
 #include <SoftwareSerial.h>
+#include <string.h>
 
 static const int RXPin = 3, TXPin = 4;
 static const int simRXPin = 7, simTXPin = 8;
@@ -34,7 +35,7 @@ void setup(){
 
 void simSetup() {
   Serial.println("Initializing Sim...");
-  delay(1000);
+  delay(2000);
 
   simSerial.println("AT"); //Handshaking with SIM900
   updateSerial();
@@ -44,11 +45,43 @@ void simSetup() {
   updateSerial();
   simSerial.println("AT+CREG?"); //Check whether it has registered in the network
   updateSerial();
+
+  /* Configure bearer profile 1 */
+  simSerial.println("AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"");  /* Connection type GPRS */
+  updateSerial();
+  
+  simSerial.println("AT+SAPBR=3,1,\"APN\",\"giffgaff.com\"");  /* APN of the provider */
+  updateSerial();
+  
+  simSerial.println("AT+SAPBR=1,1"); /* Open GPRS context */
+  delay(2000);
+  updateSerial();
+  
+  simSerial.println("AT+SAPBR=2,1"); /* Query the GPRS context */
+  updateSerial();
+
+  simSerial.println("AT+HTTPINIT");  /* Initialize HTTP service */
+  updateSerial();
+
+  simSerial.println("AT+HTTPSSL=1");
+  updateSerial();
+
+  simSerial.println("AT+HTTPSSL=?");
+  updateSerial();
+
+  simSerial.println("AT+HTTPPARA=\"CID\",1");  /* Set parameters for HTTP session */
+  updateSerial();
+
+  simSerial.println("AT+HTTPPARA=\"CONTENT\",\"application/json\"");  /* Set parameters for HTTP session */
+  updateSerial();
+
+  simSerial.println("AT+HTTPPARA=\"URL\",\"https://track.mattdavis.info/api/submit-node\"");  /* Set parameters for HTTP session */
+  updateSerial();
 }
 
 void getGPSLocation() {
 
-//  gpsSerial.listen();
+  gpsSerial.listen();
 //  delay(500);
 
   // This sketch displays information every time a new sentence is correctly encoded.
@@ -72,24 +105,43 @@ void sendLocation() {
   unsigned long timeDelta = (millis() - lastUpdate) / 1000;
 
   if (timeDelta >= REPORT_INTERVAL){
+    simSerial.listen();
     lastUpdate = millis();
-    simSerial.println("AT+CMGF=1"); // Configuring TEXT mode
-    updateSerial();
-    simSerial.println("AT+CMGS=\"+ZZXXXXXXXXXX\"");//change ZZ with country code and xxxxxxxxxxx with phone number to sms
-    updateSerial();
-    simSerial.print("Longitude = "); //text content
-    simSerial.println(longitude, 6);
-    simSerial.print("Latitude = ");
-    simSerial.println(latitude, 6);
-    updateSerial();
-    simSerial.write(26);
+    if (longitude != 0 && latitude != 0)
+      sendPost();
   }
 
 }
 
+void sendPost() {
+  Serial.println("HTTP post method :");
+
+  String longString = String(longitude, 6);
+  String latString = String(latitude, 6);
+  String data = "{\"deviceID\": \"YRiehYTv7HziRKr88wCfSFX97d8DuEn6ehDNTKbJAslSqdbbfv4sN750s7y4ZNjh\", \"longitude\": " + longString + ", \"latitude\": " + latString + "}";
+
+  String length = String(data.length());
+
+  simSerial.println("AT+HTTPDATA=" + length + ",10000"); /* POST data of size 127 Bytes with maximum latency time of 10seconds for inputting the data*/
+  updateSerial();
+  
+  simSerial.println(data); /* Data to be sent */
+  updateSerial();
+  
+  simSerial.println("AT+HTTPACTION=1");  /* Start POST session */
+//  delay(2000);
+  updateSerial();
+
+//  simSerial.println("AT+HTTPTERM");  /* Terminate HTTP service */
+//  updateSerial();
+  
+//  simSerial.println("AT+SAPBR=0,1"); /* Close GPRS context */
+//  updateSerial();
+}
+
 void loop(){
   getGPSLocation();
-//  sendLocation();
+  sendLocation();
 }
 
 void updateSerial()
