@@ -2,11 +2,13 @@
 #include <SoftwareSerial.h>
 #include <string.h>
 
+static const unsigned long REPORT_INTERVAL = 30; // The interval between updates being sent to the server in seconds
+static const String DEVICE_TOKEN = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // The device token created when adding a new device
+static const String BACKEND_URL = "https://track.mattdavis.info/api/submit-node"; // The backend URL to submit nodes to, leave default if you are not hosting your own
+
 static const int RXPin = 3, TXPin = 4;
 static const int simRXPin = 7, simTXPin = 8;
 static const uint32_t GPSBaud = 9600;
-
-static const unsigned long REPORT_INTERVAL = 30; // The interval between updates being sent to the server in seconds
 
 static double longitude = 0;
 static double latitude = 0;
@@ -75,7 +77,7 @@ void simSetup() {
   simSerial.println("AT+HTTPPARA=\"CONTENT\",\"application/json\"");  /* Set parameters for HTTP session */
   updateSerial();
 
-  simSerial.println("AT+HTTPPARA=\"URL\",\"https://track.mattdavis.info/api/submit-node\"");  /* Set parameters for HTTP session */
+  simSerial.println("AT+HTTPPARA=\"URL\",\"" + BACKEND_URL + "\"");  /* Set parameters for HTTP session */
   updateSerial();
 }
 
@@ -118,7 +120,7 @@ void sendPost() {
 
   String longString = String(longitude, 6);
   String latString = String(latitude, 6);
-  String data = "{\"deviceID\": \"YRiehYTv7HziRKr88wCfSFX97d8DuEn6ehDNTKbJAslSqdbbfv4sN750s7y4ZNjh\", \"longitude\": " + longString + ", \"latitude\": " + latString + "}";
+  String data = "{\"deviceID\": \"" + DEVICE_TOKEN + "\", \"longitude\": " + longString + ", \"latitude\": " + latString + "}";
 
   String length = String(data.length());
 
@@ -141,7 +143,7 @@ void sendPost() {
 
 void loop(){
   getGPSLocation();
-  sendLocation();
+  sendLocation(); // Will attempt to submit a new node if the time elapsed is long enough
 }
 
 void updateSerial()
