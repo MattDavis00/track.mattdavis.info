@@ -2,3 +2,5 @@
 An Arduino GPS tracking solution
 
 The code contained within this repository is the code that runs the embedded arduino trackers, the website frontend, and the website backend.
+
+![Track Example](https://i.imgur.com/z1XYCKZ.gif)
